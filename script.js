@@ -1,19 +1,22 @@
 // Initialize map and marker
 let map, marker;
 
+// Function to initialize the map
 function initMap() {
     map = L.map('map').setView([37.7749, -122.4194], 5); // Default view: San Francisco
 
+    // Adding OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // Adding default marker
     marker = L.marker([37.7749, -122.4194]).addTo(map)
         .bindPopup('Default Location: San Francisco')
         .openPopup();
 }
 
-// Function to search and update the map
+// Function to search for a location and update the map
 async function searchLocation(query) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}`;
 
@@ -24,11 +27,13 @@ async function searchLocation(query) {
         if (data.length > 0) {
             const { lat, lon, display_name } = data[0];
 
-            map.setView([lat, lon], 8); // Update map view
-            marker.setLatLng([lat, lon]) // Move marker
+            // Update map view to new location
+            map.setView([lat, lon], 8);
+            marker.setLatLng([lat, lon]) // Move marker to new location
                 .bindPopup(`<b>${display_name}</b>`)
                 .openPopup();
 
+            // Fetch disaster alerts, earthquake trends, and emergency alerts for new location
             fetchDisasterAlerts(lat, lon);
             fetchEarthquakeTrends(lat, lon);
             fetchEmergencyAlerts(lat, lon);
@@ -40,14 +45,14 @@ async function searchLocation(query) {
     }
 }
 
-// Search bar event listener
+// Event listener for search bar (trigger search on pressing Enter key)
 document.getElementById("search").addEventListener("keypress", function (event) {
-    if (event.key === "Enter") { // Trigger search on 'Enter' key
+    if (event.key === "Enter") {
         searchLocation(this.value);
     }
 });
 
-// Fetch and Display GDACS Emergency Alerts
+// Function to fetch and display GDACS emergency alerts
 async function fetchEmergencyAlerts(lat = 37.7749, lon = -122.4194) {
     try {
         const response = await fetch("https://www.gdacs.org/xml/rss.xml");
@@ -57,15 +62,16 @@ async function fetchEmergencyAlerts(lat = 37.7749, lon = -122.4194) {
         const items = xml.querySelectorAll("item");
         
         const alertList = document.getElementById("news-list");
-        alertList.innerHTML = "";
+        alertList.innerHTML = ""; // Clear previous alerts
         
         if (items.length === 0) {
             alertList.innerHTML = "<li>No recent emergency alerts.</li>";
             return;
         }
         
+        // Loop through emergency alert items (limit to 5)
         items.forEach((item, index) => {
-            if (index < 5) { // Limit to 5 alerts
+            if (index < 5) {
                 const title = item.querySelector("title").textContent;
                 const link = item.querySelector("link").textContent;
                 const pubDate = item.querySelector("pubDate").textContent;
@@ -83,7 +89,7 @@ async function fetchEmergencyAlerts(lat = 37.7749, lon = -122.4194) {
     }
 }
 
-// Initialize disaster alerts
+// Function to fetch and display disaster alerts (earthquakes)
 async function fetchDisasterAlerts(lat = 37.7749, lon = -122.4194) {
     try {
         const response = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${lat}&longitude=${lon}&maxradiuskm=500&limit=5`);
@@ -96,6 +102,7 @@ async function fetchDisasterAlerts(lat = 37.7749, lon = -122.4194) {
             return;
         }
 
+        // Loop through earthquake alerts and display them
         data.features.forEach(alert => {
             const { mag, place, time } = alert.properties;
             const alertItem = document.createElement("li");
@@ -107,12 +114,13 @@ async function fetchDisasterAlerts(lat = 37.7749, lon = -122.4194) {
     }
 }
 
-// Fetch and Display Earthquake Trends
+// Function to fetch and display earthquake trends
 async function fetchEarthquakeTrends(lat = 37.7749, lon = -122.4194) {
     try {
         const response = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${lat}&longitude=${lon}&maxradiuskm=500&limit=20`);
         const data = await response.json();
         
+        // Extract relevant data for visualization
         const trendData = data.features.map(feature => ({
             time: new Date(feature.properties.time),
             magnitude: feature.properties.mag
@@ -124,6 +132,7 @@ async function fetchEarthquakeTrends(lat = 37.7749, lon = -122.4194) {
     }
 }
 
+// Function to display earthquake trends on a chart
 function displayEarthquakeTrends(trendData) {
     const trendChartCanvas = document.getElementById("trendChartCanvas").getContext("2d");
 
@@ -132,13 +141,16 @@ function displayEarthquakeTrends(trendData) {
         return;
     }
 
+    // Prepare labels and data for the chart
     const labels = trendData.map(data => data.time.toLocaleDateString());
     const magnitudes = trendData.map(data => data.magnitude);
 
+    // Destroy previous chart if exists
     if (window.earthquakeChart) {
         window.earthquakeChart.destroy();
     }
 
+    // Create a new chart
     window.earthquakeChart = new Chart(trendChartCanvas, {
         type: 'line',
         data: {
@@ -173,25 +185,15 @@ function displayEarthquakeTrends(trendData) {
                         maxTicksLimit: 6
                     }
                 }
-            },
-            elements: {
-                point: {
-                    radius: 3
-                }
-            },
-            animation: {
-                duration: 500
             }
         }
     });
 }
 
-// Initialize dashboard
-function initDashboard() {
+// Function to initialize the dashboard
+document.addEventListener("DOMContentLoaded", function() {
     initMap();
     fetchDisasterAlerts();
     fetchEarthquakeTrends();
     fetchEmergencyAlerts();
-}
-
-document.addEventListener("DOMContentLoaded", initDashboard);
+});
