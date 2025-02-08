@@ -1,0 +1,154 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background: url('https://thumbs.dreamstime.com/b/breaking-news-alert-background-red-theme-breaking-news-alert-background-red-theme-vector-119214405.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+header {
+    background: rgba(248, 66, 11, 0.8); /* Slightly transparent blue background */
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+header input[type="text"] {
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: none;
+    border-radius: 5px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+
+.alerts, .map, .trend-chart, .heat-map, .latest-news, .preparedness-tips, .social-media {
+    opacity: 0; /* Start with hidden */
+    transform: translateY(20px); /* Start slightly lower */
+    animation: fadeInUp 0.5s forwards; /* Animation effect */
+}
+
+.alerts {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.alerts h2 {
+    margin-bottom: 15px;
+}
+
+.map {
+    flex: 2;
+    height: 400px; /* Adjust height as needed */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #eaeaea;
+}
+
+.charts-container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.trend-chart, .heat-map {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.trend-chart h2, .heat-map h2 {
+    margin-bottom: 15px;
+}
+
+#trendChart {
+    width: 100%;
+    height: 300px; /* Adjust height as needed */
+}
+
+.heat-map-placeholder {
+    width: 100%;
+    height: 300px; /* Adjust height as needed */
+    background-color: #eaeaea; /* Placeholder color */
+    text-align: center;
+    line-height: 300px; /* Center text vertically */
+    color: #666;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.latest-news, .preparedness-tips, .social-media {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.latest-news h2, .preparedness-tips h2, .social-media h2 {
+    margin-bottom: 15px;
+}
+
+.latest-news ul, .preparedness-tips ul {
+    list-style-type: none;
+}
+
+.social-media {
+    text-align: center;
+}
+
+#social-media-placeholder {
+    height: 200px; /* Placeholder height */
+    background-color: #eaeaea; /* Placeholder color */
+    line-height: 200px; /* Center text vertically */
+    color: #666;
+}
+
+/* Keyframes for fade-in-up animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#trendChartContainer {
+    width: 100%;
+    max-width: 600px;  /* 🔹 Adjust graph width */
+    height: 300px;  /* 🔹 Fix the height */
+    margin: auto;
+}
+
+#trendChartCanvas {
+    width: 100% !important;
+    height: 100% !important;
+}

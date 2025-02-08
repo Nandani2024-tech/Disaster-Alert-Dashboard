@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Alert Dashboard</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Load Leaflet.js (Free Maps API) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Chart.js for Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Disaster Alert Dashboard</h1>
+        <input type="text" id="search" placeholder="Search by location...">
+    </header>
+    
+    <div class="container">
+        <section class="alerts">
+            <h2>Disaster Alerts</h2>
+            <ul id="alert-list"></ul>
+        </section>
+        
+        <section class="map" id="map"></section>
+    </div>
+
+    <div class="charts-container">
+        <section class="trend-chart">
+            <h2>Earthquake Trends Over Time</h2>
+            <canvas id="trendChartCanvas"></canvas>
+        </section>
+    </div>
+    
+    <div class="info-container">
+        
+        <section class="preparedness-tips">
+            <h2>Tips for Preparedness</h2>
+            <ul>
+                <li>Have an emergency kit ready.</li>
+                <li>Create a family communication plan.</li>
+                <li>Stay informed about local hazards.</li>
+                <li>Practice evacuation routes.</li>
+                <li>Follow local authorities' instructions.</li>
+            </ul>
+        </section>
+        <div class="social-media">
+            <h2>Live Disaster Updates from Twitter</h2>
+            <a class="twitter-timeline" href="https://twitter.com/USGS" data-theme="light">
+                Tweets by USGS
+            </a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
